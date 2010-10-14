@@ -32,7 +32,7 @@
   <!-- Teach Ant how to use the Hibernate Tools -->
   <taskdef name="hibernatetool"
            classname="org.hibernate.tool.ant.HibernateToolTask"
-	   classpathref="project.class.path" />
+           classpathref="project.class.path"/>
 
   <target name="db" description="Runs HSQLDB database management UI
 against the database file--use when application is not running">
@@ -49,7 +49,7 @@ against the database file--use when application is not running">
   </target>
 
   <!-- Generate the java code for all mapping files in our source tree -->
-  <target name="codegen" 
+  <target name="codegen" depends="prepare"
           description="Generate Java source from the O/R mapping files">
     <hibernatetool destdir="${source.root}">
       <configuration>
@@ -59,11 +59,33 @@ against the database file--use when application is not running">
       </configuration>
       <hbm2java/>
     </hibernatetool>
-  </target>  
+  </target>
 
-  <target name="print-classpath" description="Show the dependency class path">
-    <property name="class.path" refid="dependency.class.path"/>
-    <echo>${class.path}</echo>
+  <!-- Create our runtime subdirectories and copy resources into them -->
+  <target name="prepare" description="Sets up build structures">
+    <mkdir dir="${class.root}"/>
+
+    <!-- Copy our property files and O/R mappings for use at runtime -->
+    <copy todir="${class.root}" >
+      <fileset dir="${source.root}" >
+        <include name="**/*.properties"/>
+        <include name="**/*.hbm.xml"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <!-- Generate the schemas for all mapping files in our class tree -->
+  <target name="schema" depends="prepare"
+          description="Generate DB schema from the O/R mapping files">
+
+    <hibernatetool destdir="${source.root}">
+      <configuration>
+        <fileset dir="${class.root}">
+          <include name="**/*.hbm.xml"/>
+        </fileset>
+      </configuration>
+      <hbm2ddl drop="yes" />
+    </hibernatetool>
   </target>
 
 </project>
