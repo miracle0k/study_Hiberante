@@ -21,9 +21,9 @@ public class QueryTest {
      * @return a list of {@link Track}s meeting the length restriction.
      */
     public static List tracksNoLongerThan(Time length, Session session) {
-        Query query = session.createQuery("from Track as track where track.playTime <= ?");
+        Query query = session.createQuery("from Track as track where track.playTime <= :length");
+        query.setTime("length", length);        
         
-        query.setParameter(0, length, Hibernate.TIME);
         return query.list();
     }   
 
