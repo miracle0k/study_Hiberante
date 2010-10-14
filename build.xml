@@ -80,4 +80,30 @@ against the database file--use when application is not running">
     </hibernatetool>
   </target>
 
+  <!-- Compile the java source of the project -->
+  <target name="compile" depends="prepare"
+          description="Compiles all Java classes">
+    <javac srcdir="${source.root}"
+           destdir="${class.root}"
+           debug="on"
+           optimize="off"
+           deprecation="on">
+      <classpath refid="project.class.path"/>
+    </javac>
+  </target>
+
+  <target name="ctest" description="Creates and persists some sample data"
+          depends="compile">
+    <java classname="com.oreilly.hh.CreateTest" fork="true" failonerror="true">
+      <classpath refid="project.class.path"/>
+    </java>
+  </target>
+
+ <target name="qtest" description="Run a simple Hibernate query"
+          depends="compile">
+    <java classname="com.oreilly.hh.QueryTest" fork="true" failonerror="true">
+      <classpath refid="project.class.path"/>
+    </java>
+  </target>
+
 </project>
