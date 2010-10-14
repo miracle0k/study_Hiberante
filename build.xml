@@ -52,11 +52,7 @@ against the database file--use when application is not running">
   <target name="codegen" depends="prepare"
           description="Generate Java source from the O/R mapping files">
     <hibernatetool destdir="${source.root}">
-      <configuration>
-        <fileset dir="${source.root}">
-          <include name="**/*.xml"/>
-        </fileset>
-      </configuration>
+      <configuration configurationfile="${source.root}/hibernate.cfg.xml"/>
       <hbm2java/>
     </hibernatetool>
   </target>
@@ -69,7 +65,7 @@ against the database file--use when application is not running">
     <copy todir="${class.root}" >
       <fileset dir="${source.root}" >
         <include name="**/*.properties"/>
-        <include name="**/*.hbm.xml"/>
+        <include name="**/*.xml"/>
       </fileset>
     </copy>
   </target>
@@ -79,11 +75,7 @@ against the database file--use when application is not running">
           description="Generate DB schema from the O/R mapping files">
 
     <hibernatetool destdir="${source.root}">
-      <configuration>
-        <fileset dir="${class.root}">
-          <include name="**/*.hbm.xml"/>
-        </fileset>
-      </configuration>
+      <configuration configurationfile="${source.root}/hibernate.cfg.xml"/>
       <hbm2ddl drop="yes" />
     </hibernatetool>
   </target>
