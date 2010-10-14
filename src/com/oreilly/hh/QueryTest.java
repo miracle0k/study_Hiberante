@@ -21,8 +21,8 @@ public class QueryTest {
      * @return a list of {@link Track}s meeting the length restriction.
      */
     public static List tracksNoLongerThan(Time length, Session session) {
-        Query query = session.createQuery("from Track as track where track.playTime <= :length");
-        query.setTime("length", length);        
+        Query query = session.getNamedQuery("com.oreilly.hh.tracksNoLongerThan");
+        query.setTime("length", length);
         
         return query.list();
     }   

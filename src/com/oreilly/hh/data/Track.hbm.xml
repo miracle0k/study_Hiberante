@@ -32,4 +32,11 @@
     </property>
 
   </class>
+  
+  <query name="com.oreilly.hh.tracksNoLongerThan">
+  	<![CDATA[
+  		from Track as track
+  		where track.playTime <= :length
+  	]]>
+  </query>
 </hibernate-mapping>
