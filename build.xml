@@ -29,6 +29,11 @@
       <path refid="dependency.class.path"/>
   </path>
 
+  <!-- Teach Ant how to use the Hibernate Tools -->
+  <taskdef name="hibernatetool"
+           classname="org.hibernate.tool.ant.HibernateToolTask"
+	   classpathref="project.class.path" />
+
   <target name="db" description="Runs HSQLDB database management UI
 against the database file--use when application is not running">
       <java classname="org.hsqldb.util.DatabaseManager"
@@ -42,6 +47,19 @@ against the database file--use when application is not running">
          <arg value="sa"/>
       </java>
   </target>
+
+  <!-- Generate the java code for all mapping files in our source tree -->
+  <target name="codegen" 
+          description="Generate Java source from the O/R mapping files">
+    <hibernatetool destdir="${source.root}">
+      <configuration>
+        <fileset dir="${source.root}">
+          <include name="**/*.xml"/>
+        </fileset>
+      </configuration>
+      <hbm2java/>
+    </hibernatetool>
+  </target>  
 
   <target name="print-classpath" description="Show the dependency class path">
     <property name="class.path" refid="dependency.class.path"/>
