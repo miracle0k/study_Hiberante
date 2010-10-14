@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<Context 
+    docBase="/home/rfowler/current/examples/ch14/webapp" 
+    debug="0" 
+    reloadable="true"
+    >
+</Context>

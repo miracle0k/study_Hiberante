@@ -1,0 +1,23 @@
+Thanks for downloading the example code for Harnessing Hibernate (an
+updated and expanded version of Hibernate: A Developer's Notebook).
+The examples all rely on the Maven Tasks for Ant being available to
+your Ant installation. To install Maven Tasks for Ant, drop the
+maven-ant-tasks-2.0.8.jar file (found in the lib directory of this
+download) into the lib directory of your Ant installation.
+
+If you haven't installed Ant yet, see the first part of Chapter 1 for
+instructions on where to find it.
+
+Once you've successfully set up Ant, you should have an ANT_HOME
+environment variable. Copy the maven-ant-tasks-2.0.8.jar file to
+ANT_HOME/lib.
+
+On Windows you can do this by running:
+
+  copy lib\maven-ant-tasks-2.0.8.jar %ANT_HOME%\lib
+
+On Unix (bash), you can do this by running:
+
+  cp lib/maven-ant-tasks-2.0.8.jar ${ANT_HOME}/lib
+
+

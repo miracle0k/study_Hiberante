@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<project name="Harnessing Hibernate 3 (Developer's Notebook Second Edition)"
+         default="db" basedir="."
+         xmlns:artifact="antlib:org.apache.maven.artifact.ant" >
+
+  <!-- Set up properties containing important project directories -->
+  <property name="source.root" value="src"/>
+  <property name="class.root" value="webapp/WEB-INF/classes"/>
+  <property name="data.dir" value="webapp/WEB-INF/data"/>
+
+  <artifact:dependencies pathId="dependency.class.path"
+                         filesetid="dependency.fileset">
+    <dependency groupId="hsqldb" artifactId="hsqldb" version="1.8.0.7"/>
+    <dependency groupId="mysql" artifactId="mysql-connector-java"
+                version="5.0.5"/>
+    <dependency groupId="org.hibernate" artifactId="hibernate"
+                version="3.2.5.ga">
+      <exclusion  groupId="javax.transaction" artifactId="jta" />
+    </dependency>
+    <dependency groupId="org.hibernate" artifactId="hibernate-tools"
+                version="3.2.0.beta9a"/>
+    <dependency groupId="org.apache.geronimo.specs"
+                artifactId="geronimo-jta_1.1_spec" version="1.1"/>
+    <dependency groupId="log4j" artifactId="log4j" version="1.2.14" />
+    <dependency groupId="javax.servlet" artifactId="jstl" version="1.1.1" />
+    <dependency groupId="taglibs" artifactId="standard" version="1.1.1" />
+
+    <dependency groupId="org.hibernate" artifactId="hibernate-annotations"
+                version="3.3.0.ga" />
+    <dependency groupId="org.hibernate"
+                artifactId="hibernate-commons-annotations"
+                version="3.3.0.ga" />
+    <dependency groupId="org.springframework" artifactId="spring"
+                version="2.5"/>
+    <dependency groupId="commons-dbcp" artifactId="commons-dbcp"
+                version="1.2.2"/>
+    <dependency groupId="net.sourceforge.stripes" artifactId="stripes"
+                version="1.4.3" />
+    <dependency groupId="tomcat" artifactId="servlet-api" version="5.5.12" />
+    <dependency groupId="tomcat" artifactId="catalina-ant" 
+                version="5.5.15" />
+    <dependency groupId="tomcat" artifactId="jasper-compiler"
+                version="5.5.15" />
+    <dependency groupId="tomcat" artifactId="jasper-runtime"
+                version="5.5.15" />
+  </artifact:dependencies>
+
+  <!-- Set up the class path for compilation and execution -->
+  <path id="project.class.path">
+      <!-- Include our own classes, of course -->
+      <pathelement location="${class.root}" />
+      <!-- Add the dependencies classpath -->
+      <path refid="dependency.class.path"/>
+  </path>
+
+  <!-- Teach Ant how to use the Hibernate Tools -->
+  <taskdef name="hibernatetool"
+           classname="org.hibernate.tool.ant.HibernateToolTask"
+           classpathref="project.class.path" />
+
+  <!-- Teach Ant how to use Tomcat's deploy task -->
+  <taskdef name="deploy" classpathref="dependency.class.path"  
+           classname="org.apache.catalina.ant.DeployTask"/> 
+
+  <target name="db" description="Runs HSQLDB database management UI
+against the database file--use when application is not running">
+    <java classname="org.hsqldb.util.DatabaseManager"
+          fork="yes">
+       <classpath refid="project.class.path"/>
+       <arg value="-driver"/>
+       <arg value="org.hsqldb.jdbcDriver"/>
+       <arg value="-url"/>
+       <arg value="jdbc:hsqldb:${data.dir}/music"/>
+       <arg value="-user"/>
+       <arg value="sa"/>
+    </java>
+  </target>
+
+  <!-- Generate the java code for all mapping files in our source tree -->
+  <target name="codegen" depends="prepare"
+          description="Generate Java source from the O/R mapping files">
+    <hibernatetool destdir="${source.root}">
+      <configuration>
+        <fileset dir="${source.root}">
+          <include name="**/*.hbm.xml"/>
+        </fileset>
+      </configuration>
+      <hbm2java jdk5="true"/>
+    </hibernatetool>
+  </target>
+
+  <!-- Create our runtime subdirectories and copy resources into them -->
+  <target name="prepare" description="Sets up build structures">
+    <mkdir dir="${class.root}"/>
+
+    <!-- Copy our property files and O/R mappings for use at runtime -->
+    <copy todir="${class.root}" >
+      <fileset dir="${source.root}" >
+        <include name="**/*.properties"/>
+        <include name="**/*.xml"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <!-- Generate the schemas for annotated classes -->
+  <target name="schema" depends="compile"
+          description="Generate DB schema from the O/R mapping files">
+    <hibernatetool destdir="${source.root}">
+      <classpath refid="project.class.path" />
+      <annotationconfiguration configurationfile="${source.root}/hibernate.cfg.xml" />
+      <hbm2ddl drop="yes" />
+    </hibernatetool>
+  </target>
+        
+  <!-- Compile the java source of the project -->
+  <target name="compile" depends="prepare"
+          description="Compiles all Java classes">
+    <javac srcdir="${source.root}"
+           destdir="${class.root}"
+           debug="on"
+           optimize="off"
+           deprecation="on">
+      <classpath refid="project.class.path"/>
+    </javac>
+    <filter token="docroot" value="${basedir}/webapp" />
+    <copy todir="webapp/WEB-INF" filtering="true" overwrite="true">
+      <fileset dir="src" includes="applicationContext.xml" />
+    </copy>
+    <copy todir="webapp/WEB-INF/lib" flatten="true">
+      <fileset refid="dependency.fileset" />
+    </copy>
+  </target>
+
+  <target name="ctest" description="Creates and persists some sample data"
+          depends="compile">
+    <java classname="com.oreilly.hh.CreateTest" fork="true" failonerror="true">
+      <classpath refid="project.class.path"/>
+    </java>
+  </target>
+
+ <target name="qtest" description="Run a simple Hibernate query"
+          depends="compile">
+    <java classname="com.oreilly.hh.QueryTest" fork="true" failonerror="true">
+      <classpath refid="project.class.path"/>
+    </java>
+  </target>
+
+  <target name="qtest2" description="Run a simple Artist exploration GUI"
+          depends="compile">
+    <java classname="com.oreilly.hh.QueryTest2" fork="true" failonerror="true">
+      <classpath refid="project.class.path"/>
+    </java>
+  </target>
+
+  <target name="atest" description="Creates and persists some album data"
+          depends="compile">
+    <java classname="com.oreilly.hh.AlbumTest" fork="true" failonerror="true">
+      <classpath refid="project.class.path"/>
+    </java>
+  </target>
+
+  <target name="qtest3" description="Retrieve all mapped objects"
+          depends="compile">
+    <java classname="com.oreilly.hh.QueryTest3" fork="true" failonerror="true">
+     <classpath refid="project.class.path"/>
+    </java>
+  </target>
+
+  <target name="deploy">
+    <deploy url="http://localhost:8080/manager" 
+            username="tomcat" password="tomcat" 
+            path="/stripesapp" 
+            config="${basedir}/tomcat-context.xml" />
+  </target>
+        
+</project>

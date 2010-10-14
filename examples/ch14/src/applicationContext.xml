@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+    default-lazy-init="true">
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="annotatedClasses">
+            <list>
+                <value>com.oreilly.hh.data.Album</value>
+                <value>com.oreilly.hh.data.AlbumTrack</value>
+                <value>com.oreilly.hh.data.Artist</value>
+                <value>com.oreilly.hh.data.StereoVolume</value>
+                <value>com.oreilly.hh.data.Track</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+                <prop key="hibernate.connection.autocommit">false</prop>
+                <prop key="hibernate.connection.release_mode">after_transaction</prop>
+                <prop key="hibernate.connection.shutdown">true</prop>
+                <prop key="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</prop>
+                <prop key="hibernate.connection.url">jdbc:hsqldb:@docroot@/WEB-INF/data/music</prop>
+                <prop key="hibernate.connection.username">sa</prop>
+                <prop key="hibernate.connection.password"></prop>
+                <prop key="hibernate.current_session_context_class">thread</prop>
+                <prop key="hibernate.jdbc.batch_size">0</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- enable the configuration of transactional behavior based on annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+    
+    <bean id="transactionManager"
+        class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref local="sessionFactory"/>
+        </property>
+        <property name="prepareConnection" value="true"/>
+    </bean>
+
+    <bean id="albumDAO" class="com.oreilly.hh.dao.hibernate.AlbumHibernateDAO">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="artistDAO" class="com.oreilly.hh.dao.hibernate.ArtistHibernateDAO">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="trackDAO" class="com.oreilly.hh.dao.hibernate.TrackHibernateDAO">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="createTest" class="com.oreilly.hh.CreateTest">
+        <property name="trackDAO" ref="trackDAO"/>
+        <property name="artistDAO" ref="artistDAO"/>
+    </bean>
+
+    <bean id="queryTest" class="com.oreilly.hh.QueryTest">
+        <property name="trackDAO" ref="trackDAO"/>
+    </bean>
+
+    <bean id="queryTest2" class="com.oreilly.hh.QueryTest2">
+        <property name="artistDAO" ref="artistDAO"/>
+    </bean>
+
+    <bean id="albumTest" class="com.oreilly.hh.AlbumTest">
+        <property name="albumDAO" ref="albumDAO"/>
+        <property name="artistDAO" ref="artistDAO"/>
+        <property name="trackDAO" ref="trackDAO"/>
+    </bean>
+    
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+        <property name="cacheQueries">
+            <value>true</value>
+        </property>
+    </bean>
+</beans>

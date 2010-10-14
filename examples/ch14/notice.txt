@@ -1,0 +1,1 @@
+ch14/src/StripesResources.properties was developed by Tim Fennell.  The license for that code is in ch14/stripes_license.txt.
