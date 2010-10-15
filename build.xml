@@ -53,7 +53,7 @@ against the database file--use when application is not running">
           description="Generate Java source from the O/R mapping files">
     <hibernatetool destdir="${source.root}">
       <configuration configurationfile="${source.root}/hibernate.cfg.xml"/>
-      <hbm2java/>
+      <hbm2java jdk5="true" />
     </hibernatetool>
   </target>
 

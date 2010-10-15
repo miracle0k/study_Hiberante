@@ -15,14 +15,22 @@
       <generator class="native"/>
     </id>
 
-    <property name="title" type="string" not-null="true"/>
+    <property name="title" type="string" >
+    	<meta attribute="use-in-tostring">true</meta>
+    	<column name="TITLE" not-null="true" index="TRACK_TITLE" />
+    </property>
 
     <property name="filePath" type="string" not-null="true"/>
 
     <property name="playTime" type="time">
       <meta attribute="field-description">Playing time</meta>
     </property>
-
+    
+    <set name="artists" table="TRACK_ARTISTS">
+    	<key column="TRACK_ID" />
+    	<many-to-many class="com.oreilly.hh.data.Artist" column="ARTIST_ID"/>
+    </set>
+    
     <property name="added" type="date">
       <meta attribute="field-description">When the track was created</meta>
     </property>

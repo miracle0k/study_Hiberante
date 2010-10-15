@@ -1,8 +1,10 @@
 package com.oreilly.hh.data;
-// Generated 2010. 10. 14 오후 4:11:56 by Hibernate Tools 3.2.0.b9
+// Generated 2010. 10. 15 오전 9:49:41 by Hibernate Tools 3.2.0.b9
 
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *       Represents a single playable track in the music database.
@@ -19,6 +21,7 @@ public class Track  implements java.io.Serializable {
       * Playing time
      */
      private Date playTime;
+     private Set<Artist> artists = new HashSet<Artist>(0);
      /**
       * When the track was created
      */
@@ -37,10 +40,11 @@ public class Track  implements java.io.Serializable {
         this.filePath = filePath;
         this.volume = volume;
     }
-    public Track(String title, String filePath, Date playTime, Date added, short volume) {
+    public Track(String title, String filePath, Date playTime, Set<Artist> artists, Date added, short volume) {
        this.title = title;
        this.filePath = filePath;
        this.playTime = playTime;
+       this.artists = artists;
        this.added = added;
        this.volume = volume;
     }
@@ -76,6 +80,13 @@ public class Track  implements java.io.Serializable {
     public void setPlayTime(Date playTime) {
         this.playTime = playTime;
     }
+    public Set<Artist> getArtists() {
+        return this.artists;
+    }
+    
+    public void setArtists(Set<Artist> artists) {
+        this.artists = artists;
+    }
     /**       
      *      * When the track was created
      */
@@ -97,6 +108,19 @@ public class Track  implements java.io.Serializable {
         this.volume = volume;
     }
 
+    /**
+     * toString
+     * @return String
+     */
+     public String toString() {
+	  StringBuffer buffer = new StringBuffer();
+
+      buffer.append(getClass().getName()).append("@").append(Integer.toHexString(hashCode())).append(" [");
+      buffer.append("title").append("='").append(getTitle()).append("' ");			
+      buffer.append("]");
+      
+      return buffer.toString();
+     }
 
 
 
