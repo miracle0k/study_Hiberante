@@ -37,5 +37,6 @@
     <!-- List all the mapping documents we're using -->
     <mapping resource="com/oreilly/hh/data/Track.hbm.xml"/>
     <mapping resource="com/oreilly/hh/data/Artist.hbm.xml"/>
+    <mapping resource="com/oreilly/hh/data/Album.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>
