@@ -25,7 +25,22 @@ public class QueryTest {
         query.setTime("length", length);
         
         return query.list();
-    }   
+    }
+    
+    public static String listArtistNames(Set<Artist> artists) {
+    	StringBuffer result = new StringBuffer();
+    	
+    	for(Artist artist : artists) {
+    		result.append((result.length() == 0) ? "(" : ", ");
+    		result.append(artist.getName());
+    	}
+    	
+    	if(result.length() > 0) {
+    		result.append(") ");
+    	}
+    	
+    	return result.toString();
+    }
 
     /**
      * Look up and print some tracks when invoked from the command line.
@@ -43,12 +58,13 @@ public class QueryTest {
         Session session = sessionFactory.openSession();
         try {
             // Print the tracks that will fit in five minutes
-            List tracks = tracksNoLongerThan(Time.valueOf("00:05:00"),
+            List tracks = tracksNoLongerThan(Time.valueOf("00:07:00"),
                                              session);
             for (ListIterator iter = tracks.listIterator() ;
                  iter.hasNext() ; ) {
                 Track aTrack = (Track)iter.next();
-                System.out.println("Track: \"" + aTrack.getTitle() +
+                System.out.println("Track: \"" + aTrack.getTitle() + "\" " +
+                		listArtistNames(aTrack.getArtists()) +
                                    "\", " + aTrack.getPlayTime());
             }
         } finally {
