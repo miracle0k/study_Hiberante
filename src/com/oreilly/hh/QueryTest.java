@@ -66,6 +66,9 @@ public class QueryTest {
                 System.out.println("Track: \"" + aTrack.getTitle() + "\" " +
                 		listArtistNames(aTrack.getArtists()) +
                                    "\", " + aTrack.getPlayTime());
+                for(String comment : aTrack.getComments()) {
+                	System.out.println("   Commnet: " + comment);
+                }
             }
         } finally {
             // No matter what, close the session

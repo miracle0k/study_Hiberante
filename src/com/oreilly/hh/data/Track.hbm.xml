@@ -38,7 +38,11 @@
     <property name="volume" type="short" not-null="true">
       <meta attribute="field-description">How loud to play the track</meta>
     </property>
-
+	
+	<set name="comments" table="TRACK_COMMENTS">
+		<key column="TRACK_ID" />
+		<element column="COMMENT" type="string" />
+	</set>
   </class>
   
   <query name="com.oreilly.hh.tracksNoLongerThan">

@@ -52,28 +52,28 @@ public class CreateTest {
                                   "vol2/album610/track02.mp3",
                                   Time.valueOf("00:03:30"),
                                   new HashSet<Artist>(),
-                                  new Date(), (short)0);
+                                  new Date(), (short)0, new HashSet<String>());
           addTrackArtist(track, getArtist("PPK", true, session));
           session.save(track);
 
           track = new Track("Video Killed the Radio Star",
                             "vol2/album611/track12.mp3",
                             Time.valueOf("00:03:49"), new HashSet<Artist>(),
-                            new Date(), (short)0);
+                            new Date(), (short)0, new HashSet<String>());
           addTrackArtist(track, getArtist("The Buggles", true, session));
           session.save(track);
                 
           track = new Track("Gravity's Angel",
                             "vol2/album175/track03.mp3",
                             Time.valueOf("00:06:06"), new HashSet<Artist>(),
-                            new Date(), (short)0);
+                            new Date(), (short)0, new HashSet<String>());
           addTrackArtist(track, getArtist("Laurie Anderson", true, session));
           session.save(track);
 
           track = new Track("Adagio for Strings (Ferry Corsten Remix)",
                             "vol2/album972/track01.mp3",
                             Time.valueOf("00:06:35"), new HashSet<Artist>(),
-                            new Date(), (short)0);
+                            new Date(), (short)0, new HashSet<String>());
           addTrackArtist(track, getArtist("William Orbit", true, session));
           addTrackArtist(track, getArtist("Ferry Corsten", true, session));
           addTrackArtist(track, getArtist("Samuel Barber", true, session));
@@ -82,7 +82,7 @@ public class CreateTest {
           track = new Track("Adagio for Strings (ATB Remix)",
                             "vol2/album972/track02.mp3",
                             Time.valueOf("00:07:39"), new HashSet<Artist>(),
-                            new Date(), (short)0);
+                            new Date(), (short)0, new HashSet<String>());
           addTrackArtist(track, getArtist("William Orbit", true, session));
           addTrackArtist(track, getArtist("ATB", true, session));
           addTrackArtist(track, getArtist("Samuel Barber", true, session));
@@ -91,7 +91,7 @@ public class CreateTest {
           track = new Track("The World '99",
                             "vol2/singles/pvw99.mp3",
                             Time.valueOf("00:07:05"), new HashSet<Artist>(),
-                            new Date(), (short)0);
+                            new Date(), (short)0, new HashSet<String>());
           addTrackArtist(track, getArtist("Pulp Victim", true, session));
           addTrackArtist(track, getArtist("Ferry Corsten", true, session));
           session.save(track);
@@ -99,7 +99,9 @@ public class CreateTest {
           track = new Track("Test Tone 1",
                             "vol2/singles/test01.mp3",
                             Time.valueOf("00:00:10"), new HashSet<Artist>(),
-                            new Date(), (short)0);
+                            new Date(), (short)0, new HashSet<String>());
+          track.getComments().add("Pink noise to test equaliztion");
+          
           session.save(track);
 
           // We're done; make our changes permanent

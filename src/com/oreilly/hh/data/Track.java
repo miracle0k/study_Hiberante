@@ -1,5 +1,5 @@
 package com.oreilly.hh.data;
-// Generated 2010. 10. 15 오전 9:49:41 by Hibernate Tools 3.2.0.b9
+// Generated 2010. 10. 15 오전 10:48:51 by Hibernate Tools 3.2.0.b9
 
 
 import java.util.Date;
@@ -30,6 +30,7 @@ public class Track  implements java.io.Serializable {
       * How loud to play the track
      */
      private short volume;
+     private Set<String> comments = new HashSet<String>(0);
 
     public Track() {
     }
@@ -40,13 +41,14 @@ public class Track  implements java.io.Serializable {
         this.filePath = filePath;
         this.volume = volume;
     }
-    public Track(String title, String filePath, Date playTime, Set<Artist> artists, Date added, short volume) {
+    public Track(String title, String filePath, Date playTime, Set<Artist> artists, Date added, short volume, Set<String> comments) {
        this.title = title;
        this.filePath = filePath;
        this.playTime = playTime;
        this.artists = artists;
        this.added = added;
        this.volume = volume;
+       this.comments = comments;
     }
    
     public int getId() {
@@ -106,6 +108,13 @@ public class Track  implements java.io.Serializable {
     
     public void setVolume(short volume) {
         this.volume = volume;
+    }
+    public Set<String> getComments() {
+        return this.comments;
+    }
+    
+    public void setComments(Set<String> comments) {
+        this.comments = comments;
     }
 
     /**
