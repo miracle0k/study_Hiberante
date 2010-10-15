@@ -1,5 +1,5 @@
 package com.oreilly.hh.data;
-// Generated 2010. 10. 15 오후 2:02:08 by Hibernate Tools 3.2.0.b9
+// Generated 2010. 10. 15 오후 2:57:40 by Hibernate Tools 3.2.0.b9
 
 
 import java.util.Date;

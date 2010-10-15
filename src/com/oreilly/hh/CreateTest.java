@@ -21,8 +21,12 @@ public class CreateTest {
 		Artist found = (Artist) query.uniqueResult();
 		
 		if(found == null && create) {
-			found = new Artist(name, new HashSet<Track>());
+			found = new Artist(name, new HashSet<Track>(), null);
 			session.save(found);
+		}
+		
+		if(found != null && found.getActualArtist() != null) {
+			return found.getActualArtist();
 		}
 		
 		return found;
